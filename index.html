@@ -46,29 +46,33 @@
             font-weight: 700;
             text-align: center;
         }
-        /* Real-time Clock & Date */
-        .datetime-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            background: rgba(22, 32, 51, 0.7);
-            border: 1px solid var(--border-color);
-            padding: 8px 18px;
-            border-radius: 20px;
-            margin-top: -4px;
-        }
-        .live-time {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--accent);
-            letter-spacing: 0.05em;
-        }
-        .live-date {
-            font-size: 0.8rem;
-            color: var(--text-sub);
-            font-weight: 500;
-        }
+		/* Inline Real-time Date & Clock */
+		.datetime-box {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			background: rgba(22, 32, 51, 0.7);
+			border: 1px solid var(--border-color);
+			padding: 8px 18px;
+			border-radius: 20px;
+			margin-top: -4px;
+			font-size: 0.92rem;
+		}
+		.live-date {
+			color: var(--text-sub);
+			font-weight: 500;
+		}
+		.datetime-separator {
+			color: var(--border-color);
+			font-weight: 300;
+		}
+		.live-time {
+			font-weight: 700;
+			color: var(--accent);
+			letter-spacing: 0.03em;
+		}
         p.subtitle {
             color: var(--text-sub);
             font-size: 0.95rem;
@@ -111,10 +115,12 @@
         <h1>Chapei Yeak Restaurant</h1>
 
         <!-- Live Clock & Date Display -->
-        <div class="datetime-box">
-            <span id="live-time" class="live-time">--:--:--</span>
-            <span id="live-date" class="live-date">Loading date...</span>
-        </div>
+		<!-- Live Date First, Time Behind -->
+		<div class="datetime-box">
+			<span id="live-date" class="live-date">Loading date...</span>
+			<span class="datetime-separator">|</span>
+			<span id="live-time" class="live-time">--:--:--</span>
+		</div>
 
         <p class="subtitle">Select an option below</p>
 
@@ -148,32 +154,31 @@
 
     <!-- Clock Script -->
     <script>
-        function updateLiveDateTime() {
-            const now = new Date();
+				function updateLiveDateTime() {
+			const now = new Date();
 
-            // Time: HH:MM:SS AM/PM
-            const timeString = now.toLocaleTimeString([], { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit', 
-                hour12: true 
-            });
+			// Date: Day, Month DD, YYYY (e.g., Tue, Sep 15, 2026)
+			const dateString = now.toLocaleDateString([], { 
+				weekday: 'short', 
+				year: 'numeric', 
+				month: 'short', 
+				day: 'numeric' 
+			});
 
-            // Date: Day, Month DD, YYYY
-            const dateString = now.toLocaleDateString([], { 
-                weekday: 'short', 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric' 
-            });
+			// Time: HH:MM:SS AM/PM (e.g., 07:15:30 PM)
+			const timeString = now.toLocaleTimeString([], { 
+				hour: '2-digit', 
+				minute: '2-digit', 
+				second: '2-digit', 
+				hour12: true 
+			});
 
-            document.getElementById('live-time').textContent = timeString;
-            document.getElementById('live-date').textContent = dateString;
-        }
+			document.getElementById('live-date').textContent = dateString;
+			document.getElementById('live-time').textContent = timeString;
+		}
 
-        // Initialize and refresh every second
-        updateLiveDateTime();
-        setInterval(updateLiveDateTime, 1000);
+		updateLiveDateTime();
+		setInterval(updateLiveDateTime, 1000);
     </script>
 </body>
 </html>
